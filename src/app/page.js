@@ -15,11 +15,12 @@ export default function Home() {
     try {
       e.preventDefault();
       const value = inputValue;
-      const req = await fetch(`api/${value}`);
+      const req = await fetch(`/api`, { method: "POST", body: JSON.stringify({ prompt: value }), headers: { "Content-Type": "application/json" } });
       const res = await req.json()
-      setData(res)
+      setData(res.result)
 
     } catch (error) {
+      console.log(error)
       alert(error)
     }
   };
