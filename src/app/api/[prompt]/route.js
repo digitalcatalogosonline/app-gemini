@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET(request, { params }) {
     try {
         const { prompt } = await params
-        const genAI = new GoogleGenerativeAI("AIzaSyBuOtu1ZuWEAIYTnyMpZvukrKUwVsV7Gf8");
+        const genAI = new GoogleGenerativeAI(process.env.API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const result = await model.generateContent(prompt);
         console.log(result.response.text());
