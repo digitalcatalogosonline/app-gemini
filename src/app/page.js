@@ -37,7 +37,7 @@ export default function Home() {
 
   return (
     <>
-      <div style={{ width: "80%", height: "65vh", margin: "0 auto", background: "#ddd", padding: "20px", border: "1px solid #ccc", borderRadius: "10px", overflowY: "auto", position: "relative" }}>
+      <div style={{ width: "80%", height: "65vh", margin: "0 auto", background: "#ddd", padding: "20px", border: "1px solid #ccc", borderRadius: "10px", overflowY: !loading ? "auto" : "hidden", position: "relative" }}>
         <pre style={{ whiteSpace: "pre-wrap", fontSize: "1.1rem" }} dangerouslySetInnerHTML={{ __html: data }}></pre>
         <Image src="/watch-loader.svg" alt="" width={100} height={100} style={{ display: !loading ? "none" : "inline", position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }} />
       </div>
