@@ -10,7 +10,7 @@ import CardActions from '@mui/material/CardActions';
 
 export default function CardApp({ tittle, imageUrl, appUrl }) {
     return (
-        <Card sx={{ minWidth: 360, maxWidth: 450 }}>
+        <Card sx={{ minWidth: 345,flexBasis:360, maxWidth: 450 }}>
             <CardActionArea>
                 <CardMedia
                     component="img"
