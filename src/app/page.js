@@ -1,51 +1,24 @@
 "use client"
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import CardApp from './components/Card';
+import Image from 'next/image';
+import { Box } from '@mui/material';
 
 export default function Home() {
-  const [data, setData] = useState("");
-  const [inputValue, setInputValue] = useState("");
-  const [active, setActive] = useState(false)
-  const [loading, setLoading] = useState(false)
 
-  const stylesTextArea =
-    { resize: "none", height: 80, border: "none", outline: active ? "none" : "none", flexGrow: "1", padding: 10 }
-  const btnSubmit =
-    { flexGrow: ".2", maxWidth: 50, height: 50, borderRadius: "100%", border: "none", background: "#ccc" }
+    return (
+        <Box sx={{ paddingInline: { sm: 0, md: 10, xl: 20 }, display: "flex", flexDirection: "column", gap: 5 }}>
+            <Paper elevation={2} sx={{ width: "100%", height: "400px", margin: "0 auto", position: "relative" }}><Image src={"/imagen_ia.png"} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(.15)" }} width={500} height={500} alt="" priority /><Typography variant='h5' sx={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", color: "#ddd", fontWeight: "900", fontFamily: "cursive", textAlign: "center" }}> Simple app para chatear con gemini IA y convertir archivos a pdf</Typography></Paper>
 
-  async function handleOnClick(e) {
-    try {
-      e.preventDefault();
-      const value = inputValue;
-      setLoading(true)
-      const req = await fetch(`./api`, { method: "POST", body: JSON.stringify({ prompt: value }), headers: { "Content-Type": "application/json" } });
-      const res = await req.json()
-      setData(res.result)
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-      console.log(error.message)
-      alert(error.message)
+            <Box sx={{ display: 'flex', flexWrap: "wrap", justifyContent: "center", gap: 10 }}>
+                <CardApp appUrl={"/apps/chat-gemini"} tittle={"chatea con gemini"} imageUrl={"/chat_ia.webp"} />
+                <CardApp appUrl={"/apps/change-format"} tittle={"convierte a pdf"} imageUrl={"/conversion_pdf.jpeg"} />
+            </Box>
 
-    }
-  };
-  useEffect(() => {
-    setData(prev => prev.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>"))
+            <Paper elevation={0} sx={{ background: "#ddd", padding: 5, textAlign: "center" }}>Hecho con amor por Samuel Pego figueredo</Paper>
 
+        </Box>
 
-  }, [data])
-
-  return (
-    <>
-      <div style={{ width: "80%", height: "65vh", margin: "0 auto", background: "#ddd", padding: "20px", border: "1px solid #ccc", borderRadius: "10px", overflowY: !loading ? "auto" : "hidden", position: "relative" }}>
-        <pre style={{ whiteSpace: "pre-wrap", fontSize: "1.1rem", filter: !loading ? "none" : "blur(5px)" }} dangerouslySetInnerHTML={{ __html: data }}></pre>
-        <Image src="/watch-loader.svg" alt="" width={100} height={100} style={{ display: !loading ? "none" : "inline", position: "fixed", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }} />
-      </div>
-
-      <div style={{ borderRadius: "20px", display: "flex", alignItems: "center", gap: "10px", boxShadow: "4px 4px 10px 4px #ccc", width: "80%", background: "#f8f4f2", padding: "20px", position: "fixed", bottom: "20px", left: "50%", transform: "translateX(-50%)" }}>
-        <textarea style={stylesTextArea} onChange={(e) => setInputValue(e.currentTarget.value)} onMouseDown={() => setActive(true)} onMouseUp={() => setActive(false)} />
-        <input type="submit" value={"send"} style={btnSubmit} onClick={(e) => handleOnClick(e)} />
-      </div >
-    </>
-  );
+    )
 }
