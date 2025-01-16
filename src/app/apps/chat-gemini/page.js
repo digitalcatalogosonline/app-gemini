@@ -20,9 +20,10 @@ export default function Home() {
       e.preventDefault();
       const value = inputValue;
       setLoading(true)
-      const req = await fetch(`/api`, { method: "POST", body: JSON.stringify({ prompt: value }), headers: { "Content-Type": "application/json" } });
+      const req = await fetch(`/api`, { method: "POST", body: JSON.stringify({ prompt: data + value }), headers: { "Content-Type": "application/json" } });
       const res = await req.json()
-      setData(prev => prev + `<p style= "background-color: #cbc; padding: 20px;width: max-content; font-weight: 900;border-radius: 20px;text-align: center">${value}</p>` + "<br>" + res.result + "<br>")
+      setData(prev => prev + "<br>" + res.result + "<br>" + "-------------------------------------------" + "<br>")
+      // `<p style= "background-color: #cbc; padding: 20px;width: max-content; font-weight: 900;border-radius: 20px;text-align: center">${value}</p>`
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -39,7 +40,7 @@ export default function Home() {
 
   return (
     <>
-      <div style={{ display:"flex",justifyContent:"center"}}><ButtonToHome /></div>
+      <div style={{ display: "flex", justifyContent: "center" }}><ButtonToHome /></div>
       <div style={{ width: "80%", height: "60vh", margin: "0 auto", background: "#ddd", padding: "20px", border: "1px solid #ccc", borderRadius: "10px", overflowY: !loading ? "auto" : "hidden", position: "relative" }}>
         <pre style={{ whiteSpace: "pre-wrap", fontSize: "1.1rem", filter: !loading ? "none" : "blur(5px)" }} dangerouslySetInnerHTML={{ __html: data }}></pre>
         <Image src="/watch-loader.svg" alt="" width={100} height={100} style={{ display: !loading ? "none" : "inline", position: "fixed", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }} />
