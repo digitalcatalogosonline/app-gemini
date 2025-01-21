@@ -28,9 +28,8 @@ export default function Home() {
             const req = await fetch(`/api`, { method: "POST", body: JSON.stringify({ prompt: dataToRender + value }), headers: { "Content-Type": "application/json" } });
             const res = await req.json()
             setData(prev => [...prev, [value, res.result]])
-            setDataToRender(prev => prev + `<p style= "background-color: #cbc; padding: 20px;width: max-content; font-weight: 900;border-radius: 20px;text-align: center">${value}</p>` + res.result)
+            setDataToRender(prev => prev + `<p style= "background-color: #cbc; padding: 20px;width: fit-content; font-weight: 900;border-radius: 20px;text-align: center,text-wrap: wrap">${value}</p>` + res.result)
             console.log(data)
-            // `<p style= "background-color: #cbc; padding: 20px;width: max-content; font-weight: 900;border-radius: 20px;text-align: center">${value}</p>`
             setLoading(false)
         } catch (error) {
             setLoading(false)
