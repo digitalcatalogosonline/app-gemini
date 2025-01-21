@@ -1,24 +1,61 @@
 "use client"
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import CardApp from './components/Card';
-import Image from 'next/image';
-import { Box } from '@mui/material';
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import style from "./page.module.css";
+
 
 export default function Home() {
+    const [data, setData] = useState([]);
+    const [dataToRender, setDataToRender] = useState("")
+    const [inputValue, setInputValue] = useState("");
+    const [active, setActive] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    const stylesTextArea =
+        { resize: "none", height: 80, border: "none", outline: active ? "none" : "none", flexGrow: "1", padding: 10 }
+    const btnSubmit =
+        { flexGrow: ".2", maxWidth: 50, height: 50, borderRadius: "100%", border: "none", background: "#222", color: "white", }
+
+    const disabled = loading ? {
+        background: "#7d7a7a", color: "#fff", cursor: "not-allowed", pointerEvents: "none"
+    } : {}
+
+    async function handleOnClick(e) {
+        try {
+            e.preventDefault();
+            const value = inputValue;
+            setLoading(true)
+            const req = await fetch(`/api`, { method: "POST", body: JSON.stringify({ prompt: dataToRender + value }), headers: { "Content-Type": "application/json" } });
+            const res = await req.json()
+            setData(prev => [...prev, [value, res.result]])
+            setDataToRender(prev => prev + `<p style= "background-color: #cbc; padding: 20px;width: max-content; font-weight: 900;border-radius: 20px;text-align: center">${value}</p>` + res.result)
+            console.log(data)
+            // `<p style= "background-color: #cbc; padding: 20px;width: max-content; font-weight: 900;border-radius: 20px;text-align: center">${value}</p>`
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
+            console.log(error.message)
+            alert(error.message)
+
+        }
+    };
+    useEffect(() => {
+        setDataToRender(prev => prev.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>"))
+
+
+    }, [data])
 
     return (
-        <Box sx={{ paddingInline: { sm: 0, md: 10, xl: 20 }, display: "flex", flexDirection: "column", gap: 5 }}>
-            <Paper elevation={2} sx={{ width: "100%", height: "400px", margin: "0 auto", position: "relative" }}><Image src={"/imagen_ia.png"} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(.15)" }} width={500} height={500} alt="" priority /><Typography variant='h5' sx={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", color: "#ddd", fontWeight: "900", fontFamily: "cursive", textAlign: "center" }}> Simple app para chatear con gemini IA y convertir archivos a pdf</Typography></Paper>
+        <>
+            <div style={{ width: "80%", height: "60vh", margin: "0 auto", background: "#ddd", padding: "20px", border: "1px solid #ccc", borderRadius: "10px", overflowY: !loading ? "auto" : "hidden", position: "relative" }}>
+                <pre style={{ whiteSpace: "pre-wrap", fontSize: "1.1rem", filter: !loading ? "none" : "blur(5px)" }} dangerouslySetInnerHTML={{ __html: dataToRender }}></pre>
+                <Image src="/watch-loader.svg" alt="" width={100} height={100} style={{ display: !loading ? "none" : "inline", position: "fixed", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }} />
+            </div>
 
-            <Box sx={{ paddingInline:5,display: 'flex', flexWrap: "wrap", justifyContent: "center", gap: 10 }}>
-                <CardApp appUrl={"/apps/chat-gemini"} tittle={"chatea con gemini"} imageUrl={"/chat_ia.webp"} />
-                <CardApp appUrl={"/apps/change-format"} tittle={"convierte a pdf"} imageUrl={"/conversion_pdf.jpeg"} />
-            </Box>
-
-            <Paper elevation={0} sx={{ background: "#ddd", padding: 5, textAlign: "center" }}>Hecho con amor por Samuel Pego figueredo</Paper>
-
-        </Box>
-
-    )
+            <div style={{ borderRadius: "20px", display: "flex", alignItems: "center", gap: "10px", boxShadow: "4px 4px 10px 4px #ccc", width: "80%", background: "#f8f4f2", padding: "20px", position: "fixed", bottom: "20px", left: "50%", transform: "translateX(-50%)" }}>
+                <textarea style={stylesTextArea} onChange={(e) => setInputValue(e.currentTarget.value)} onMouseDown={() => setActive(true)} onMouseUp={() => setActive(false)} />
+                <input className={style.button_submit} type="submit" value={"send"} style={{ ...btnSubmit, ...disabled }} onClick={(e) => handleOnClick(e)} />
+            </div >
+        </>
+    );
 }
