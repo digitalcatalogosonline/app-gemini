@@ -45,17 +45,10 @@ export default function Home() {
 
     }, [data])
 
-    useEffect(() => {
-        if (!loading) {
-            ref.current.scrollIntoView({ behavior: "smooth", block: "end" });
-
-        }
-    }, [loading])
-
 
     return (
         <>
-            <div ref={ref} style={{ width: "80%", height: "60vh", margin: "0 auto", background: "#222123", padding: "20px", border: "1px solid #ccc", borderRadius: "10px", overflowY: !loading ? "auto" : "hidden", position: "relative" }}>
+            <div ref={ref} style={{ width: "80%", height: "60vh", margin: "0 auto", background: "#222123", padding: "20px", border: "1px solid #ccc", borderRadius: "10px", overflowY: "auto", position: "relative" }}>
                 <pre style={{ whiteSpace: "pre-wrap", color: "#b1b0b1", fontSize: "1rem", filter: !loading ? "none" : "blur(5px)" }} dangerouslySetInnerHTML={{ __html: dataToRender }}></pre>
                 <Image src="/watch-loader.svg" alt="" width={100} height={100} style={{ display: !loading ? "none" : "inline", position: "fixed", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }} />
             </div>
