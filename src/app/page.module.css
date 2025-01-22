@@ -2,11 +2,3 @@
     background: #434242 !important;
 
 }
-.disabled {
-    background: #7d7a7a !important;
-    color: #fff !important;
-    cursor: not-allowed;
-    pointer-events: none;
-    /* color: #c7fe63; */
-    /* border-style: ; */
-}
